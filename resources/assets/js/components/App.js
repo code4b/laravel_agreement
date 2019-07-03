@@ -104,63 +104,109 @@ handleSubmit(e) {
         }
     //populate all added agreements - feature for admin only    
     renderAgreements() {
-   
-        return this.state.agreements.map(agreement => (
-            
-            <div key={agreement.id} className="media">
-                <div className="media-body">
-                    <p>
+        return ( 
+        <div className="table-responsive">          
+        <table className="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Actions</th>
+          
+            </tr>
+          </thead>
+          <tbody>
+
+            {
+               this.state.agreements.map((agreement,index) => (
+                <tr key={agreement.id} >
+                <td>{index+1}</td>
+                <td>{agreement.title}</td>
+                <td>  
+                     <button
+                                onClick={() => this.handleDelete(agreement.id)}
+                                className="btn btn-sm btn-danger float-right"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                onClick={() => this.handleEdit(agreement)}
+                                className="btn btn-sm btn-primary float-right"
+                            >
+                                Edit
+                            </button>
+                </td>
+              
+                </tr>
                
-                        <span className={"agreement-txt " +(agreement.completed ? "done" : "")}>{agreement.title}{' '}</span>
-                        <button
-                            onClick={() => this.handleDelete(agreement.id)}
-                            className="btn btn-sm btn-danger float-right"
-                        >
-                            Delete
-                        </button>
-                        <button
-                            onClick={() => this.handleEdit(agreement)}
-                            className="btn btn-sm btn-primary float-right"
-                        >
-                            Edit
-                        </button>
-                   
-                    </p>
-                </div>
-            </div>
-        ));
+            )) 
+            }
+          </tbody>
+        </table>
+        </div>
+        )
+        
     }
     //populate agent view according to pending agreement status
-    renderAgentview() {
+    renderAgentAgreements() {
      
         return (
+            
             <div className="row container">
             <div className="col-md-12">
+         
+                       
+                      
+                      
+                
                 {
 
                       (this.state.goToNext)? this.agentDash():
-                      <div className="col-md-12">
-                          {
-                      this.state.agreements.map(agreement => { 
-                        
-                        return (
-                          
-                        <div key={agreement.id} className={"panel panel-"+(agreement.completed ? "success" : "default")}>
-                        <div className="panel-heading"> 
-                        <h4>
-                            <span className={"agreement-txt " +(agreement.completed ? "done" : "")}> {agreement.title}{' '} </span>          
-                        </h4>
-                        </div>
-                        <div className="panel-body">
-                            {agreement.content}  
-                        </div>
-                            <input type="checkbox" value={agreement.completed} defaultChecked={agreement.completed} onClick={() => this.handleAccept(agreement.id)}   id={'agreement_'+agreement.id}  className="checkbox checkbox--checkbox checkbox--success" tabIndex="1" />
-                            <label htmlFor= {'agreement_'+agreement.id}  className="checkbox__label">Accept</label>
+                      <div id="accordion">          
+                   
+
+            {
+
+                this.state.agreements.map((agreement,index) => { 
+                                        
+                    return (
+                        <div key={agreement.id} className="card">
+                        <div className="card-header" id={"heading"+index}>
+                          <h5 className="mb-0">
+                            <button className={"btn btn-"+(agreement.completed ? "success" : "link")}  data-toggle="collapse" data-target={"#collapseOne"} aria-expanded="true" aria-controls="collapseOne">
+                              <h4>{agreement.title}</h4>
+                            </button>
+                          </h5>
                         </div>
                     
-                        )})
-                     }
-                                       <button className="btn btn-info" onClick={() => this.doProceed()} >Proceed</button> </div>
+                        <div id={"collapse"+index} className="collapse show" aria-labelledby={"heading"+index} data-parent="#accordion">
+                          <div className="card-body">
+                          {agreement.content}
+                           <div>
+                         
+                            <input type="checkbox" value={agreement.completed} defaultChecked={agreement.completed} onClick={() => this.handleAccept(agreement.id)}   id={'agreement_'+agreement.id} className="checkbox checkbox--checkbox checkbox--success" tabIndex="1" />
+                              <label htmlFor=  {'agreement_'+agreement.id}  className="checkbox__label">Accept</label>
+                          </div>
+                           
+                             
+                          </div>
+                        </div>
+                      </div>
+                     
+                            
+                         
+               
+
+                    )}
+                    )
+
+            }
+         
+        <button className="btn btn-info" onClick={() => this.doProceed()} >Proceed</button> 
+        </div>
+                    
+                     
+                                     
                 }
               
                 </div>
@@ -279,9 +325,8 @@ handleSubmit(e) {
           
             <div className="container">
             <div className="row">
-            <button  className="btn btn-success"onClick={this.showUsers} > Show users</button>
-            </div>
-                <div className="row justify-content-center">
+            <div className="col-md-10">
+            <div className="row justify-content-center">
                     <div className="col-md-8">
                         <div className="card">
                             <div className="card-header"><h4><b>Create Agreement</b></h4></div>
@@ -327,16 +372,19 @@ handleSubmit(e) {
                 <div className="row justify-content-center">
               
                     <div className="col-md-12">
-                        <div className="card">
-                            <div className="card-header"><h4><b>Added Agreements</b></h4></div>
-                            <div className="card-body">
-                            {this.renderAgreements()}
-                            </div>
-                        </div>
+                    <h4><b>Added Agreements</b></h4>
+                    {this.renderAgreements()}
+                       
                     </div>
                 
                     </div>
-                    {/* modal for displaying all users */}
+            </div>
+            <div className="col-md-2">
+            <button  className="btn btn-success"onClick={this.showUsers} > Show all users</button>
+            </div>
+            
+            </div>
+               
                     <Modal show={this.state.showUsers} handleClose={this.showUsers} setAgreement={this.showUsers}  >
 
                     <div className="row container">
@@ -358,7 +406,7 @@ handleSubmit(e) {
     }
     //set view according to usertype
     renderView() {
-        return (this.state.isAdmin)?this.adminView():this.renderAgentView();
+        return (this.state.isAdmin)?this.adminView():this.renderAgentAgreements();
        
     }
  
