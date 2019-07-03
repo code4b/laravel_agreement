@@ -262,14 +262,16 @@ handleSubmit(e) {
         this.state.agreements.map((agreement) => {
             if (agreement.id === id){
                 agreement.completed = !agreement.completed;
+                console.log(this.state.pendingAgreements)
                 if(agreement.completed){
                     this.setState({pendingAgreements: this.state.pendingAgreements.filter(value => value!=id)});
                 }else{
-                  
                     let joined = this.state.pendingAgreements.concat(''+id);
                     this.setState({pendingAgreements: joined});
+
+                   
                 }
-     
+                console.log(this.state.pendingAgreements)
             }
             return agreement;
           });
@@ -280,9 +282,10 @@ handleSubmit(e) {
     }
     //proceed after accepting agreements , agents are allowed to welcome page only after accepting all agreements
     doProceed(){
+
         if(this.state.pendingAgreements.length>0){
            
-                alert("Please accept all agreements !")
+                 alert("Please accept all agreements !")
             
         }else{
             axios

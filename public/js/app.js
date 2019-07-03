@@ -53726,7 +53726,6 @@ var App = function (_Component) {
             completed: false,
             buttonTxt: 'Create',
             showUsers: false,
-            shareID: '',
             users: [],
             agreements: [],
             pendingAgreements: []
@@ -53766,7 +53765,7 @@ var App = function (_Component) {
             this.setState(_defineProperty({}, name, value));
         }
 
-        // create handleSubmit method right after handleChange method
+        // make agreemnts create request to the backend - admin feature
 
     }, {
         key: 'handleSubmit',
@@ -53792,6 +53791,8 @@ var App = function (_Component) {
                 });
             });
         }
+        // make agreemnts update request to the backend - admin feature
+
     }, {
         key: 'handleUpdate',
         value: function handleUpdate(e) {
@@ -53823,52 +53824,91 @@ var App = function (_Component) {
                 });
             });
         }
+        //populate all added agreements - feature for admin only    
+
     }, {
         key: 'renderAgreements',
         value: function renderAgreements() {
             var _this4 = this;
 
-            return this.state.agreements.map(function (agreement) {
-                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { key: agreement.id, className: 'media' },
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'table-responsive' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'table',
+                    { className: 'table' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'media-body' },
+                        'thead',
+                        null,
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'p',
+                            'tr',
                             null,
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'span',
-                                { className: "agreement-txt " + (agreement.completed ? "done" : "") },
-                                agreement.title,
-                                ' '
+                                'th',
+                                null,
+                                '#'
                             ),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                {
-                                    onClick: function onClick() {
-                                        return _this4.handleDelete(agreement.id);
-                                    },
-                                    className: 'btn btn-sm btn-danger float-right'
-                                },
-                                'Delete'
+                                'th',
+                                null,
+                                'Title'
                             ),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'button',
-                                {
-                                    onClick: function onClick() {
-                                        return _this4.handleEdit(agreement);
-                                    },
-                                    className: 'btn btn-sm btn-primary float-right'
-                                },
-                                'Edit'
+                                'th',
+                                null,
+                                'Actions'
                             )
                         )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'tbody',
+                        null,
+                        this.state.agreements.map(function (agreement, index) {
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'tr',
+                                { key: agreement.id },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'td',
+                                    null,
+                                    index + 1
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'td',
+                                    null,
+                                    agreement.title
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'td',
+                                    null,
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'button',
+                                        {
+                                            onClick: function onClick() {
+                                                return _this4.handleDelete(agreement.id);
+                                            },
+                                            className: 'btn btn-sm btn-danger float-right'
+                                        },
+                                        'Delete'
+                                    ),
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'button',
+                                        {
+                                            onClick: function onClick() {
+                                                return _this4.handleEdit(agreement);
+                                            },
+                                            className: 'btn btn-sm btn-primary float-right'
+                                        },
+                                        'Edit'
+                                    )
+                                )
+                            );
+                        })
                     )
-                );
-            });
+                )
+            );
         }
+        //populate agent view according to pending agreement status
+
     }, {
         key: 'renderAgentAgreements',
         value: function renderAgentAgreements() {
@@ -53880,42 +53920,51 @@ var App = function (_Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'col-md-12' },
-                    this.state.goToNext ? this.agentView() : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.state.goToNext ? this.agentDash() : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { className: 'col-md-12' },
-                        this.state.agreements.map(function (agreement) {
+                        { id: 'accordion' },
+                        this.state.agreements.map(function (agreement, index) {
 
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
-                                { key: agreement.id, className: "panel panel-" + (agreement.completed ? "success" : "default") },
+                                { key: agreement.id, className: 'card' },
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'div',
-                                    { className: 'panel-heading' },
+                                    { className: 'card-header', id: "heading" + index },
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                        'h4',
-                                        null,
+                                        'h5',
+                                        { className: 'mb-0' },
                                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                            'span',
-                                            { className: "agreement-txt " + (agreement.completed ? "done" : "") },
-                                            ' ',
-                                            agreement.title,
-                                            ' ',
-                                            ' '
+                                            'button',
+                                            { className: "btn btn-" + (agreement.completed ? "success" : "link"), 'data-toggle': 'collapse', 'data-target': "#collapseOne", 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'h4',
+                                                null,
+                                                agreement.title
+                                            )
                                         )
                                     )
                                 ),
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'div',
-                                    { className: 'panel-body' },
-                                    agreement.content
-                                ),
-                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', value: agreement.completed, defaultChecked: agreement.completed, onClick: function onClick() {
-                                        return _this5.handleAccept(agreement.id);
-                                    }, id: 'agreement_' + agreement.id, className: 'checkbox checkbox--checkbox checkbox--success', tabIndex: '1' }),
-                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'label',
-                                    { htmlFor: 'agreement_' + agreement.id, className: 'checkbox__label' },
-                                    'Accept'
+                                    { id: "collapse" + index, className: 'collapse show', 'aria-labelledby': "heading" + index, 'data-parent': '#accordion' },
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'div',
+                                        { className: 'card-body' },
+                                        agreement.content,
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'div',
+                                            null,
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', value: agreement.completed, defaultChecked: agreement.completed, onClick: function onClick() {
+                                                    return _this5.handleAccept(agreement.id);
+                                                }, id: 'agreement_' + agreement.id, className: 'checkbox checkbox--checkbox checkbox--success', tabIndex: '1' }),
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'label',
+                                                { htmlFor: 'agreement_' + agreement.id, className: 'checkbox__label' },
+                                                'Accept'
+                                            )
+                                        )
+                                    )
                                 )
                             );
                         }),
@@ -53925,12 +53974,13 @@ var App = function (_Component) {
                                     return _this5.doProceed();
                                 } },
                             'Proceed'
-                        ),
-                        ' '
+                        )
                     )
                 )
             );
         }
+        //get all agreements : response are based on user type
+
     }, {
         key: 'getAgreements',
         value: function getAgreements() {
@@ -53941,18 +53991,21 @@ var App = function (_Component) {
                 return _this6.setState(_extends({}, response.data));
             });
         }
+        //get all users except current one - feature for admin only
+
     }, {
         key: 'getOtherUsers',
         value: function getOtherUsers() {
             var _this7 = this;
 
-            axios.get('/agreement/OtherUsers').then(function (response // console.log(response.data.agreements)
-            ) {
+            axios.get('/agreement/OtherUsers').then(function (response) {
                 return _this7.setState({
                     users: [].concat(_toConsumableArray(response.data.users))
                 });
             });
         }
+        // edit agreement - admin feature
+
     }, {
         key: 'handleEdit',
         value: function handleEdit(agreement) {
@@ -53962,12 +54015,11 @@ var App = function (_Component) {
                 content: agreement.content,
                 buttonTxt: 'Update'
             });
-            console.log('onChange', this.state.name);
         }
     }, {
         key: 'handleDelete',
         value: function handleDelete(id) {
-            // remove from local state
+            // remove agreement - admin feature
             var isNotId = function isNotId(agreement) {
                 return agreement.id !== id;
             };
@@ -53981,25 +54033,26 @@ var App = function (_Component) {
         value: function handleAccept(id) {
             var _this8 = this;
 
-            // remove from pending agreements state
-
-
+            //while accepting each agreement, remove it from pending agreements state
             this.state.agreements.map(function (agreement) {
                 if (agreement.id === id) {
                     agreement.completed = !agreement.completed;
+                    console.log(_this8.state.pendingAgreements);
                     if (agreement.completed) {
                         _this8.setState({ pendingAgreements: _this8.state.pendingAgreements.filter(function (value) {
                                 return value != id;
                             }) });
                     } else {
-
                         var joined = _this8.state.pendingAgreements.concat('' + id);
                         _this8.setState({ pendingAgreements: joined });
                     }
+                    console.log(_this8.state.pendingAgreements);
                 }
                 return agreement;
             });
         }
+        //proceed after accepting agreements , agents are allowed to welcome page only after accepting all agreements
+
     }, {
         key: 'doProceed',
         value: function doProceed() {
@@ -54018,18 +54071,21 @@ var App = function (_Component) {
                 });
             }
         }
+        //display all users - admin feature
+
     }, {
         key: 'showUsers',
-        value: function showUsers(shareId) {
+        value: function showUsers(id) {
 
             this.setState({
-                shareID: shareId,
                 showUsers: !this.state.showUsers
             });
         }
+        //welcome view for users who accepted all agreements
+
     }, {
-        key: 'agentView',
-        value: function agentView() {
+        key: 'agentDash',
+        value: function agentDash() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'container' },
@@ -54044,6 +54100,8 @@ var App = function (_Component) {
                 )
             );
         }
+        //view for admin user
+
     }, {
         key: 'adminView',
         value: function adminView() {
@@ -54054,89 +54112,80 @@ var App = function (_Component) {
                     'div',
                     { className: 'row' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'button',
-                        { className: 'btn btn-success', onClick: this.showUsers },
-                        ' Show users'
-                    )
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'row justify-content-center' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { className: 'col-md-8' },
+                        { className: 'col-md-10' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
-                            { className: 'card' },
+                            { className: 'row justify-content-center' },
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
-                                { className: 'card-header' },
+                                { className: 'col-md-8' },
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'h4',
-                                    null,
-                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                        'b',
-                                        null,
-                                        'Create Agreement'
-                                    )
-                                )
-                            ),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'div',
-                                { className: 'card-body' },
-                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                    'form',
-                                    null,
+                                    'div',
+                                    { className: 'card' },
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                         'div',
-                                        { className: 'form-group' },
-                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text',
-                                            onChange: this.handleChange,
-                                            value: this.state.title,
-                                            className: 'form-control',
-
-                                            maxLength: '100',
-                                            placeholder: 'Agreement title',
-                                            required: true,
-                                            name: 'title' }),
-                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', {
-                                            name: 'content',
-                                            onChange: this.handleChange,
-                                            value: this.state.content,
-                                            className: 'form-control',
-                                            rows: '5',
-                                            maxLength: '',
-                                            placeholder: 'Create agreement content',
-                                            required: true
-                                        })
+                                        { className: 'card-header' },
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'h4',
+                                            null,
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'b',
+                                                null,
+                                                'Create Agreement'
+                                            )
+                                        )
                                     ),
-                                    this.state.id ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                        'button',
-                                        { type: 'submit', onClick: this.handleUpdate, className: 'btn btn-primary' },
-                                        this.state.buttonTxt
-                                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                        'button',
-                                        { type: 'submit', onClick: this.handleSubmit, className: 'btn btn-primary' },
-                                        this.state.buttonTxt
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'div',
+                                        { className: 'card-body' },
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'form',
+                                            null,
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'div',
+                                                { className: 'form-group' },
+                                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text',
+                                                    onChange: this.handleChange,
+                                                    value: this.state.title,
+                                                    className: 'form-control',
+
+                                                    maxLength: '100',
+                                                    placeholder: 'Agreement title',
+                                                    required: true,
+                                                    name: 'title' }),
+                                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', {
+                                                    name: 'content',
+                                                    onChange: this.handleChange,
+                                                    value: this.state.content,
+                                                    className: 'form-control',
+                                                    rows: '5',
+                                                    maxLength: '',
+                                                    placeholder: 'Create agreement content',
+                                                    required: true
+                                                })
+                                            ),
+                                            this.state.id ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'button',
+                                                { type: 'submit', onClick: this.handleUpdate, className: 'btn btn-primary' },
+                                                this.state.buttonTxt
+                                            ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                                'button',
+                                                { type: 'submit', onClick: this.handleSubmit, className: 'btn btn-primary' },
+                                                this.state.buttonTxt
+                                            )
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null)
                                     )
-                                ),
-                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null)
+                                )
                             )
-                        )
-                    )
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'row justify-content-center' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'col-md-12' },
+                        ),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
-                            { className: 'card' },
+                            { className: 'row justify-content-center' },
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
-                                { className: 'card-header' },
+                                { className: 'col-md-12' },
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'h4',
                                     null,
@@ -54145,13 +54194,18 @@ var App = function (_Component) {
                                         null,
                                         'Added Agreements'
                                     )
-                                )
-                            ),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                'div',
-                                { className: 'card-body' },
+                                ),
                                 this.renderAgreements()
                             )
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'col-md-2' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { className: 'btn btn-success', onClick: this.showUsers },
+                            ' Show all users'
                         )
                     )
                 ),
@@ -54194,10 +54248,11 @@ var App = function (_Component) {
                 )
             );
         }
+        //set view according to usertype
+
     }, {
         key: 'renderView',
         value: function renderView() {
-            console.log(this.state.isAdmin);
             return this.state.isAdmin ? this.adminView() : this.renderAgentAgreements();
         }
     }, {

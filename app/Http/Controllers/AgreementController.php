@@ -24,7 +24,7 @@ class AgreementController extends Controller {
         }else{
             $users = [];
             $userAgreements = DB::table('userAgreements')->where('userId', Auth::id())->pluck('agreements');
-            $pendingAgreements= trim($userAgreements[0])!=''?explode(',', $userAgreements[0]):[];
+            $pendingAgreements= trim($userAgreements[0])!==''?explode(',', $userAgreements[0]):[];
             
             if(sizeof($userAgreements[0])>0){
                 $allAgreements = $agreement->whereIn('id', $pendingAgreements);
