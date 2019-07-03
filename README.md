@@ -13,6 +13,7 @@ Password:A12345
 
 Demo Db
 ------------------------------------
-You can find seed db in "seed" folder 
-**Db configuration is set with remote db for using with heroku**
+You can find seed db in "seed" folder.
+
+**_Db configuration is set with remote db for using with heroku_**
 
