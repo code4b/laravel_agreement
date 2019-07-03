@@ -18,18 +18,19 @@ class AgreementController extends Controller {
         $isAdmin = Auth::user()->isAdmin;
         $agreements=[];
         $pendingAgreements=[];
+        $users = [];
         if($isAdmin){
             $agreements = $agreement->orderBy('created_at', 'desc')->get();
             $users = User::where('id', '!=', Auth::id())->get();
         }else{
-            $users = [];
-            $userAgreements = DB::table('userAgreements')->where('userId', Auth::id())->pluck('agreements');
-            $pendingAgreements= trim($userAgreements[0])!==''?explode(',', $userAgreements[0]):[];
+           
+            // $userAgreements = DB::table('userAgreements')->where('userId', Auth::id())->pluck('agreements');
+            // $pendingAgreements= trim($userAgreements[0])!==''?explode(',', $userAgreements[0]):[];
             
-            if(sizeof($userAgreements[0])>0){
-                $allAgreements = $agreement->whereIn('id', $pendingAgreements);
-                $agreements = $allAgreements->orderBy('created_at', 'desc')->get();
-            }
+            // if(sizeof($userAgreements[0])>0){
+            //     $allAgreements = $agreement->whereIn('id', $pendingAgreements);
+            //     $agreements = $allAgreements->orderBy('created_at', 'desc')->get();
+            // }
         
         }
      
@@ -37,7 +38,7 @@ class AgreementController extends Controller {
 		return response()->json([
             'agreements' => $agreements,
             'isAdmin'=>$isAdmin,
-            'pendingAgreements'=>$pendingAgreements,
+            'pendingAgreements'=>$userAgreements,
             'goToNext'=>empty($pendingAgreements),
             'users'=> $users
 		]);
