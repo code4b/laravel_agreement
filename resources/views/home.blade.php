@@ -32,7 +32,9 @@
     <div id="root"></div>
 
 </div>
-
+<script>
+      let isAdmin= {{ Auth::user()->isAdmin }}
+</script>
 @endsection
 
 

@@ -8462,6 +8462,7 @@ body {
   vertical-align: middle;
   margin: auto 10px;
   padding: 0px 0px 1px 20px;
+  font-size: 8;
   position: relative;
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -8477,6 +8478,11 @@ body {
   transition: 0.3s ease;
   outline: 0;
   background-color: #ececec;
+}
+
+.checkbox--checkbox + .checkbox__label p {
+  margin: 0 9px 11px;
+  font-size: 12px;
 }
 
 .checkbox--checkbox + .checkbox__label:before {

@@ -6,7 +6,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isAdmin:'',
+            isAdmin:isAdmin,
             goToNext:false,
             name: '',
             completed:false,
@@ -31,8 +31,9 @@ export default class App extends Component {
        
     }
      // lifecycle method
-     componentWillMount() {
-         this.getAgreements();
+     async componentWillMount() {
+         console.log(this.state);
+         await this.getAgreements();
 
     }
     // handle change
@@ -154,27 +155,20 @@ handleSubmit(e) {
             
             <div className="row container">
             <div className="col-md-12">
-         
-                       
-                      
-                      
-                
                 {
 
                       (this.state.goToNext)? this.agentDash():
                       <div id="accordion">          
-                   
 
-            {
-
+                 { 
                 this.state.agreements.map((agreement,index) => { 
                                         
                     return (
                         <div key={agreement.id} className="card">
-                        <div className="card-header" id={"heading"+index}>
+                        <div className="card-header" id={"heading"+index}  >
                           <h5 className="mb-0">
-                            <button className={"btn btn-"+(agreement.completed ? "success" : "link")}  data-toggle="collapse" data-target={"#collapseOne"} aria-expanded="true" aria-controls="collapseOne">
-                              <h4>{agreement.title}</h4>
+                            <button className={ "btn-block text-left btn btn-outline-"+(agreement.completed ? "success" : "success")}  data-toggle="collapse" data-target={"#collapseOne"} aria-expanded="true" aria-controls="collapseOne">
+                              <h4 style={{textAlign:'left'}}>{agreement.title}</h4>
                             </button>
                           </h5>
                         </div>
@@ -201,7 +195,6 @@ handleSubmit(e) {
                     )
 
             }
-         
         <button className="btn btn-info" onClick={() => this.doProceed()} >Proceed</button> 
         </div>
                     
@@ -392,12 +385,24 @@ handleSubmit(e) {
 
                     <div className="row container">
                     <div className="col-md-12">
-                        <div className="panel panel-success">
-                            <div className="panel-heading">All users</div>
-                                <div className="panel-body">
-                                    {this.state.users.map((user,i) =><p key={i}><b>{user.name}</b>{' '+user.email }</p> ) }
-                                </div>
-                            </div>
+                        <h4>All users</h4>
+                        <div className="table-responsive">          
+                            <table className="table">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.users.map((user,i) =><tr key={i}><td>{i+1}</td><td>{user.name}</td><td>{' '+user.email }</td></tr> ) }
+                            
+                            </tbody>
+                            </table>
+                        </div>
+                        
                         </div>
                     </div>
 
@@ -407,18 +412,14 @@ handleSubmit(e) {
 
         );
     }
-    //set view according to usertype
-    renderView() {
-        return (this.state.isAdmin)?this.adminView():this.renderAgentAgreements();
-       
-    }
+   
  
       
     render() {
         return(
             <div className="container">
             
-            {this.renderView()}
+            {(this.state.isAdmin)?this.adminView():this.renderAgentAgreements()}
             
             </div>
            
