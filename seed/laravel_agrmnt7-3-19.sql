@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.42)
 # Database: laravel_agrmnt
-# Generation Time: 2019-07-03 08:31:27 +0000
+# Generation Time: 2019-07-03 09:00:42 +0000
 # ************************************************************
 
 
@@ -108,7 +108,6 @@ LOCK TABLES `userAgreements` WRITE;
 INSERT INTO `userAgreements` (`id`, `agreements`, `userId`, `created_at`, `updated_at`)
 VALUES
 	(1,'9','2',NULL,NULL),
-	(2,'1,2,3','1',NULL,NULL),
 	(3,'8','2','2018-12-13 19:56:20','2018-12-13 19:56:20'),
 	(4,'12','2','2018-12-13 21:30:45','2018-12-13 21:30:45'),
 	(5,'12','2','2018-12-13 22:33:53','2018-12-13 22:33:53'),
@@ -143,7 +142,7 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `isAdmin`)
 VALUES
-	(1,'Bismillah','burhanam2050@gmail.com','$2y$10$zj.Q7bmq3YycNw6jhb7b4ObLjJsvvdG/qppAMI0cS/BLHw/qC9HOe','CTJn1Ybkx3hwXXxKfl4fRuwaehRkYF8fXOJIpfnGGkgEapNAH1Q8s0rz6ZYU','2018-12-11 20:47:29','2018-12-11 20:47:29',1),
+	(1,'Bismillah','admin@admin.com','$2y$10$zj.Q7bmq3YycNw6jhb7b4ObLjJsvvdG/qppAMI0cS/BLHw/qC9HOe','CTJn1Ybkx3hwXXxKfl4fRuwaehRkYF8fXOJIpfnGGkgEapNAH1Q8s0rz6ZYU','2018-12-11 20:47:29','2018-12-11 20:47:29',1),
 	(2,'Bilal','bilal@bilal.com','$2y$10$wTtKDqWu3n7nhiJwBV5D.OcXAArG/DM4CzVnDuX.u3l4WoqzpuCXq','5tSCCLbFgN0vl8VIVQyGmwEv2lQPiTPkbdX2cr1pcsk4E1dL75fAacOMdkX2','2018-12-12 08:13:52','2018-12-12 08:13:52',0),
 	(3,'abc','abc@abc.com','$2y$10$zj.Q7bmq3YycNw6jhb7b4ObLjJsvvdG/qppAMI0cS/BLHw/qC9HOe','JQDeFSuJN0aHNnvjsSa3wI4Z2r4lHYh9ZtnDFgGHhqaokfPjcMCwa80OFXoC','2019-07-01 15:32:04','2019-07-01 15:32:04',0),
 	(4,'test111','ab1@abc.com','$2y$10$B3VI3ZGfCI6InqIJgldwJ.3Cq8rX/QWSZwxu4GfJuFSTGDkQQqM6S',NULL,'2019-07-02 21:57:49','2019-07-02 21:57:49',0);
