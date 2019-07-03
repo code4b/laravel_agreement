@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use DB;
 
 class RegisterController extends Controller
 {
@@ -55,18 +56,29 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create a new user instance after a valid registration and connecting new user with available agreements.
      *
      * @param  array  $data
      * @return \App\User
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user= User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        $agreements = DB::table('agreements')->select('id')->orderBy('created_at', 'desc')->pluck('id')->toArray();
+        $userAgreements = DB::table('userAgreements');
+        $addAgreements = $userAgreements->insert([
+            'agreements' => !empty($agreements)?implode(',',$agreements):'',
+            'userId'=>$user->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),  
+		]);
+
+        return $user;
         
     }
 }

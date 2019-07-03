@@ -46,6 +46,7 @@ class AgreementController extends Controller {
 	public function create() {
 		//
     }
+    //get all users except current one
     public function OtherUsers() {
         $users = User::where('id', '!=', Auth::id())->get();
         return response()->json([
@@ -62,7 +63,8 @@ class AgreementController extends Controller {
             "updated_at" => \Carbon\Carbon::now(),  # \Datetime()
 		]);
         return response(200);
-	}
+    }
+     //create agreements
 	public function store(Request $request) {
 		// validate
 		$this->validate($request, [
@@ -86,12 +88,12 @@ class AgreementController extends Controller {
 	public function show($id) {
 		//
 	}
-
+    //get details of agreements for editing
 	public function edit($id) {
         $agreement = Agreement::find($id);
         return response()->json($Agreement);
 	}
-
+    //update agreement data
     public function update($id,Request $request)
     {
         $agreement = Agreement::find($id);
@@ -101,6 +103,7 @@ class AgreementController extends Controller {
 
         return response()->json($agreement->with('user')->find($agreement->id));
     }
+    //update pending agreement list for agents
     public function complete(Request $request) {
         $pendingAgreement=$request->get('pendingAgreement');
         $id=Auth::id();

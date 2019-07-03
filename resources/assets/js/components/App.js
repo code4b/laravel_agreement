@@ -12,7 +12,6 @@ export default class App extends Component {
             completed:false,
             buttonTxt:'Create',
             showUsers:false,
-            shareID:'',
             users:[],
             agreements: [],
             pendingAgreements:[]
@@ -49,7 +48,7 @@ export default class App extends Component {
     }
 
 
-// create handleSubmit method right after handleChange method
+// make agreemnts create request to the backend - admin feature
 handleSubmit(e) {
     e.preventDefault();
 
@@ -72,6 +71,7 @@ handleSubmit(e) {
                 });
             });
     }
+    // make agreemnts update request to the backend - admin feature
     handleUpdate(e) {
         e.preventDefault();
     
@@ -102,6 +102,7 @@ handleSubmit(e) {
                     });
                 });
         }
+    //populate all added agreements - feature for admin only    
     renderAgreements() {
    
         return this.state.agreements.map(agreement => (
@@ -129,14 +130,15 @@ handleSubmit(e) {
             </div>
         ));
     }
-    renderAgentAgreements() {
+    //populate agent view according to pending agreement status
+    renderAgentview() {
      
         return (
             <div className="row container">
             <div className="col-md-12">
                 {
 
-                      (this.state.goToNext)? this.agentView():
+                      (this.state.goToNext)? this.agentDash():
                       <div className="col-md-12">
                           {
                       this.state.agreements.map(agreement => { 
@@ -167,7 +169,7 @@ handleSubmit(e) {
 
         );
     }
-
+    //get all agreements : response are based on user type
     getAgreements() {
         axios.get('/agreement').then((
             response // console.log(response.data.agreements)
@@ -179,16 +181,17 @@ handleSubmit(e) {
 
      
     }
+    //get all users except current one - feature for admin only
     getOtherUsers() {
         axios.get('/agreement/OtherUsers').then((
-            response // console.log(response.data.agreements)
+            response 
         ) =>
             this.setState({
                 users: [...response.data.users]
             })
         );
     }
-   
+     // edit agreement - admin feature
     handleEdit(agreement) {
         this.setState({
             id:agreement.id,
@@ -196,21 +199,20 @@ handleSubmit(e) {
             content: agreement.content,
             buttonTxt:'Update'
         });
-        console.log('onChange', this.state.name);
     }
 
     handleDelete(id) {
-        // remove from local state
+        // remove agreement - admin feature
         const isNotId = agreement => agreement.id !== id;
         const updatedAgreements = this.state.agreements.filter(isNotId);
         this.setState({ agreements: updatedAgreements });
         // make delete request to the backend
         axios.delete(`/agreement/${id}`);
     }
-    handleAccept(id) {
-        // remove from pending agreements state
 
-        
+ 
+    handleAccept(id) {
+       //while accepting each agreement, remove it from pending agreements state
         this.state.agreements.map((agreement) => {
             if (agreement.id === id){
                 agreement.completed = !agreement.completed;
@@ -230,6 +232,7 @@ handleSubmit(e) {
          
        
     }
+    //proceed after accepting agreements , agents are allowed to welcome page only after accepting all agreements
     doProceed(){
         if(this.state.pendingAgreements.length>0){
            
@@ -252,16 +255,16 @@ handleSubmit(e) {
        
     
      }
-
-    showUsers(shareId) {
+    //display all users - admin feature
+    showUsers(id) {
        
         this.setState({
-            shareID:shareId,
             showUsers: !this.state.showUsers
         });
         
     }
-    agentView(){
+    //welcome view for users who accepted all agreements
+    agentDash(){
         return (
             <div className="container">
             <div className="row">
@@ -270,6 +273,7 @@ handleSubmit(e) {
             </div>
         )
     }
+    //view for admin user
     adminView(){
         return (
           
@@ -332,6 +336,7 @@ handleSubmit(e) {
                     </div>
                 
                     </div>
+                    {/* modal for displaying all users */}
                     <Modal show={this.state.showUsers} handleClose={this.showUsers} setAgreement={this.showUsers}  >
 
                     <div className="row container">
@@ -351,9 +356,9 @@ handleSubmit(e) {
 
         );
     }
+    //set view according to usertype
     renderView() {
-        console.log(this.state.isAdmin);
-        return (this.state.isAdmin)?this.adminView():this.renderAgentAgreements();
+        return (this.state.isAdmin)?this.adminView():this.renderAgentView();
        
     }
  
